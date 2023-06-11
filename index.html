@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <link rel="icon" href="lib/icons/siteicon.png">
+    <title>Login</title>
     <style>
         body{
             background-color:black;
@@ -24,17 +25,41 @@
             width: 160px;
             border-radius: 7px;
         }
+        #alrtmsg{
+            color:red;
+            text-justify: bold;
+        }
     </style>
 </head>
 <body>
     <div id="sqr">
         <form action="">
             <br><label for="">Login</label><br>
-            <input type="text"><br><br>
+            <input type="text" id="logid" required><br><br>
             <label for="">Senha</label><br>
-            <input type="password"><br><br>
-            <input type="button" width="170px" value="Enter" id="btn">
+            <input type="password" id="passwd" ><br><br>
+            <input type="button" width="170px" value="Enter" id="btn" onclick="verify()">
         </form>
+        <p id="alrtmsg"></p>
     </div>
+    <script>
+        var log = document.getElementById("logid");
+        var pas = document.getElementById("passwd");
+
+    function verify(){
+        if(log.value == ''){
+            alrtmsg.innerHTML='Preencha um nome de usuário';
+        }else
+        if(log.value == "Se77ings"){
+            if(pas.value == '123'){
+                window.location.href="home.html"
+                console.log("Usuario e senha OK")
+            }else
+            alrtmsg.innerHTML= 'Nome de Usuário ou Senha incorreta'
+        }else{            
+            alrtmsg.innerHTML= 'Nome de Usuário ou Senha incorreta'
+        }
+    }
+    </script>
 </body>
 </html>
