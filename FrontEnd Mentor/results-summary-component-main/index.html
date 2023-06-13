@@ -11,37 +11,96 @@
   <!-- Feel free to remove these styles or customise in your own stylesheet 👍 -->
   <style>
     .attribution { font-size: 11px; text-align: center; }
-    .attribution a { color: hsl(228, 45%, 44%); }
+    .attribution a { color: hsl(228, 45%, 44%);}
+    #central{
+      /* height: 100px; */
+      border: solid 1px red;
+      width: 500px;
+      margin: auto;
+      display: flex;
+    }
+    #esq{
+      border: solid 2px blue;
+      width: 240px;
+      /* height: 50px; */
+      margin: auto;
+    }
+    #dir{
+      width: 240px;
+      border: solid 2px purple;
+      flex-direction: row;
+      height: auto;
+      margin: auto;
+    }
+    table td{
+      margin-left: 100px;
+      /* border: solid 1px red; */
+      
+    }
+    #reaction{
+      color: red;
+    }
+    #memory{
+      color: yellow;
+    }
+    #verbal{
+      color:green;
+    }
+    #visual{
+      color: blue;
+    }
+    #row{
+      /* background-color: green; */
+      border-radius: 10px;
+      border: solid 1px green;
+    }
+
+    
   </style>
 </head>
 <body>
 
+  
+
+
+  Continue
+  <div id="central">
+    <div id="esq">
+      
   Your Result
   76
   of 100
 
   Great
   You scored higher than 65% of the people who have taken these tests.
-  
-  Summary
+    </div>
+    <div id="dir">
+      <h3>Summary</h3>
+      <table border="0" align="center" cellspacing="0px" cellpadding="5px">
+        <tr id="row">
+          <td id="reaction"><img src="assets/images/icon-reaction.svg" alt="Reaction Icon"> Reaction</td>
+          <td>80 / 100</td>
+        </tr>
+        <tr id="row">
+          <td id="memory"><img src="assets/images/icon-memory.svg" alt="Memory Icon"> Memory</td>
+          <td>92 / 100</td>
+        </tr>
+        <tr id="row">
+          <td id="verbal"><img src="assets/images/icon-verbal.svg" alt="Verbal Icon"> Verbal</td>
+          <td>61 / 100</td>
+        </tr>
+        <tr id="row">
+          <td id="visual"><img src="assets/images/icon-visual.svg" alt="Visual Icon"> Visual</td>
+          <td>72 / 100</td>
+        </tr>
+      </table>
 
-  Reaction
-  80 / 100
-
-  Memory
-  92 / 100
-
-  Verbal
-  61 / 100
-
-  Visual
-  72 / 100
-
-  Continue
-  
+    </div>
+  </div>
   <div class="attribution">
     Challenge by <a href="https://www.frontendmentor.io?ref=challenge" target="_blank">Frontend Mentor</a>. 
-    Coded by <a href="#">Your Name Here</a>.
+    Coded by <a href="#">Se77ings</a>.
   </div>
+  <p>OBS> precisa voltar a ser paragrafos, ao inves de table</p>
 </body>
 </html>
