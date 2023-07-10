@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
+    <title>Lista músicas</title>
+    <style>
+        i{
+            height: 100px;
+        }
+        button{
+            border-radius: 10px;
+            width: 30px;
+            height: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid my-5">
+        <div>
+            <input type="text">
+            <button onclick="foo()">+</button>
+        </div>
+        <div class="container-fluid my-5">
+            <table class="table table-dark table-hover">
+                <th>Número</th>
+                <th>Nome</th>
+                <th>Another</th>
+            </table>
+        </div>
+
+    </div>
+    <script>
+        function foo(){
+
+            fetch('lista.txt')
+            .then(response => response.text())
+            .then(text => {
+                const array = text.split("\n");
+                console.log(array);
+            })
+        }
+    </script>
+</body>
+</html>
