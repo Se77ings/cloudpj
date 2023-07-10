@@ -1,3 +1,2 @@
-       total    used    free    shared    buff/cache    available
-Mem:    2004     998     155       231           850          511
-Swap:   4000       0    4000
+1;Have you ever;ccr
+2;Snuff;cory

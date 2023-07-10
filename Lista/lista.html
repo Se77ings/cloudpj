@@ -17,33 +17,61 @@
             width: 30px;
             height: 30px;
         }
+        #resultados{
+            width: 500px;
+        }
     </style>
 </head>
-<body>
+<body onload="foo()">
     <div class="container-fluid my-5">
         <div>
             <input type="text">
-            <button onclick="foo()">+</button>
+            <button>+</button>
         </div>
         <div class="container-fluid my-5">
-            <table class="table table-dark table-hover">
-                <th>Número</th>
-                <th>Nome</th>
-                <th>Another</th>
+            <table class="table table-hover" id="resultados">
+                <tr class="table table-dark">
+                    <th>Número</th>
+                    <th>Nome</th>
+                    <th>Another</th>
+                <!-- <tr id="resultados"> -->
+                </tr>
             </table>
         </div>
 
     </div>
     <script>
         function foo(){
-
             fetch('lista.txt')
             .then(response => response.text())
             .then(text => {
-                const array = text.split("\n");
-                console.log(array);
-            })
+                var array = text.split("\n");
+                var resultadosDiv = document.getElementById("resultados");
+
+                for (var i = 0; i < array.length; i++) {
+                var columns = array[i].split(";");
+                var numero = columns[0];
+                var nome = columns[1];
+                var another = columns[2];
+                resultadosDiv.innerHTML += `<tr><td>${numero}</td><td>${nome}</td><td>${another}</td></tr>`
+
+                }
+        })
         }
     </script>
 </body>
 </html>
+
+const fs = require('fs');
+
+function escreverNoArquivo(texto) {
+  fs.writeFile('lista.txt', texto, function(err) {
+    if (err) {
+      console.error('Erro ao escrever no arquivo:', err);
+    } else {
+      console.log('Texto escrito no arquivo com sucesso.');
+    }
+  });
+}
+
+escreverNoArquivo('Exemplo de texto para escrever no arquivo.');
