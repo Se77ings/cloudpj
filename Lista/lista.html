@@ -8,70 +8,65 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 
     <title>Lista músicas</title>
-    <style>
-        i{
-            height: 100px;
-        }
-        button{
-            border-radius: 10px;
-            width: 30px;
-            height: 30px;
-        }
-        #resultados{
-            width: 500px;
-        }
-    </style>
 </head>
-<body onload="foo()">
-    <div class="container-fluid my-5">
-        <div>
-            <input type="text">
-            <button>+</button>
+<body>
+    <div class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-4">
+                <div class="d-flex align-items-center mb-3">
+                    <input type="text" class="form-control me-2" placeholder="Digite o nome">
+                    <input type="text" class="form-control me-2" placeholder="Digite o Another">
+                    <button class="btn btn-primary">></button>
+                </div>
+            </div>
         </div>
-        <div class="container-fluid my-5">
-            <table class="table table-hover" id="resultados">
-                <tr class="table table-dark">
-                    <th>Número</th>
-                    <th>Nome</th>
-                    <th>Another</th>
-                <!-- <tr id="resultados"> -->
-                </tr>
-            </table>
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6">
+                <div class="table-responsive">
+                    <table class="table table-hover table-bordered" id="resultados">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Número</th>
+                                <th>Nome</th>
+                                <th>Another</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Aqui serão adicionadas as linhas da tabela dinamicamente -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
-
     </div>
-    <script>
-        function foo(){
-            fetch('lista.txt')
-            .then(response => response.text())
-            .then(text => {
-                var array = text.split("\n");
-                var resultadosDiv = document.getElementById("resultados");
-
-                for (var i = 0; i < array.length; i++) {
-                var columns = array[i].split(";");
-                var numero = columns[0];
-                var nome = columns[1];
-                var another = columns[2];
-                resultadosDiv.innerHTML += `<tr><td>${numero}</td><td>${nome}</td><td>${another}</td></tr>`
-
-                }
-        })
-        }
-    </script>
 </body>
 </html>
 
-const fs = require('fs');
+    <script>
+        init();
+        async function lerLista() {
+        var numero = 0;
+        const response = await fetch('lista.txt');
+        const text = await response.text();
+        var array = text.split("\n");
+        var resultadosDiv = document.getElementById("resultados");
 
-function escreverNoArquivo(texto) {
-  fs.writeFile('lista.txt', texto, function(err) {
-    if (err) {
-      console.error('Erro ao escrever no arquivo:', err);
-    } else {
-      console.log('Texto escrito no arquivo com sucesso.');
-    }
-  });
-}
+        for (var i = 0; i < array.length; i++) {
+            var columns = array[i].split(";");
+            var numero = columns[0];
+            var nome = columns[1];
+            var another = columns[2];
+            resultadosDiv.innerHTML += `<tr><td>${numero}</td><td>${nome}</td><td>${another}</td></tr>`
+        }
 
-escreverNoArquivo('Exemplo de texto para escrever no arquivo.');
+        return numero;
+        }
+
+        async function init() {
+        var lastNumber = await lerLista();
+        console.log('Último número -> '+lastNumber);
+        }
+
+    </script>
+</body>
+</html>
