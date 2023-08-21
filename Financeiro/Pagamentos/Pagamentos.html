@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <title>Pagamentos</title>
+    <style>
+        #myForm {
+            display: flex;
+            flex-direction: column;
+            width: 50%;
+            margin: auto;
+        }
+
+        tr {
+            text-align: center;
+        }
+
+        #global {
+            display: flex;
+            margin: auto;
+        }
+
+        #headerDetalhes {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+        }
+
+        #headerDetalhes p {
+            padding: 5px;
+            border: solid 1px black;
+            border-radius: 5px 5px 0px 0px;
+            width: 200px;
+            text-align: center;
+            /* display: flex; */
+        }
+
+        #left {
+            width: 30%;
+            margin: auto;
+            min-width: 380px;
+        }
+
+        #right {
+            width: 30%;
+            /* height: 600px; */
+            height: auto;
+            margin: auto;
+            min-width: 280px;
+            display: none;
+        }
+
+        .dark-mode {
+            background-color: #282c34;
+            color: #fff;
+        }
+
+        #futureIcon {
+            position: absolute;
+            top: 0;
+            right: 0;
+
+        }
+
+        #futureIcon #msgbox {
+            background-color: grey;
+            border-radius: 5px;
+            padding: 5px;
+            width: 300px;
+
+        }
+    </style>
+</head>
+
+<body class="dark-mode">
+
+    <div class="container mt-5" id="global">
+        <div class="container mt-0" id="left">
+            <h2 style="text-align: center;">Título</h2>
+            <form id="titulos">
+                <div class="mb-3">
+                    <label for="nomeTitulo" class="form-label">Nome Título</label>
+                    <input type="text" name="nomeTitulo" class="form-control">
+                </div>
+                <div class="mb-3">
+                    <label for="valorTotal" class="form-label">Valor Total</label>
+                    <div class="input-group">
+                        <span class="input-group-text">R$</span>
+                        <input type="text" class="form-control" id="valorTotal" name="valorTotal" required
+                            onblur="formatCurrency(this)">
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="dataAbertura" class="form-label">Data de Abertura</label>
+                    <input type="date" class="form-control" id="dataAbertura" name="dataAbertura" required>
+                </div>
+                <div class="mb-3">
+                    <label for="categoria">Categoria:</label>
+                    <select onchange="checkCategory(this);" class="form-select" name="categoria" id="categoria">
+                        <option selected hidden>Escolha uma opção abaixo</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="qtdParcelas" class="form-label">Quantidade de Parcelas</label>
+                    <input type="number" class="form-control" id="qtdParcelas" name="qtdParcelas" required>
+                </div>
+                <div class="mb-3" title="No caso de assinaturas mensais">
+                    <input class="form-check-input" type="checkbox" id="recorrente" name="recorrente">
+                    <label class="form-label" for="recorrente">Recorrente</label>
+                </div>
+                <div class="mb-3">
+                    <label for="">Tipo:</label>
+                    <input type="radio" class="form-check-input" name="tipo" value="1" id="direito" checked>
+                    <label for="direito" style="margin-right: 20px;">Direito</label>
+                    <input type="radio" class="form-check-input" name="tipo" value="2" id="obrigacao">
+                    <label for="obrigacao">Obrigação</label>
+                </div>
+            </form>
+            <button type="submit" onclick="generateInstallments()" class="btn btn-primary">Gerar Parcelas</button>
+
+            <div class="container mt-5"> <!-- col-5 -->
+                <h2>Parcelas:</h2>
+                <table id="installments" class="table table-striped table-hover">
+                    <tr class="table-dark">
+                        <th>Valor</th>
+                        <th>Emissão</th>
+                        <th>Vencimento</th>
+                        <th>Nº</th>
+                        <th>Título Referente</th>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="container mt-0" id="right">
+            <div id="Cartao">
+                <h2 style="text-align: center;">Descrição Fatura</h2>
+                <form id="cartao">
+                    <div class="mb-3">
+                        <label for="descricaoItem" class="form-label">Nome</label>
+                        <input type="text" class="form-control" id="descricaoItem" name="descricaoItem">
+                    </div>
+                    <div class="mb-3">
+                        <label for="dataCobranca" class="form-label">Data</label>
+                        <input type="date" class="form-control" id="dataCobranca" name="dataCobranca">
+                    </div>
+                    <div class="mb-3">
+                        <label for="valor" class="form-label">Valor</label>
+                        <div class="input-group">
+                            <span class="input-group-text"> R$</span>
+                            <input type="text" class="form-control" id="valor" name="valor"
+                                onblur="formatCurrency(this)">
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="selectCartao" class="form-label">Categoria</label>
+                        <select class="form-select" id="selectCartao" name="selectCartao"></select>
+                    </div>
+                </form>
+                <button class="btn btn-primary" onclick="cardBill()">Adicionar Item</button>
+            </div>
+            <div id="cardBillTable" class="container mt-5 p-0">
+                <h2 style="display: inline;">Fatura:</h2> <span style="margin-left: 100px;" id="titleFatura"></span>
+                <table id="cardBill" class="table">
+                </table>
+            </div>
+        </div>
+        <div title="Bond == título nesse contexto"><button class="btn btn-success" onclick="createBond()">Cadastrar
+                Título</button>
+                <p style="color: red; font-style: italic; text-align: center;">^^^^^^^^^^^<br>  Voltar aqui.</p>
+                
+                </div>
+    </div>
+
+    <div id="futureIcon" onmouseover="tempFunction(1)" onmouseleave="tempFunction(2)">
+        <img width="80px" src="../../lib/icons/FutureUpdates.png" style="margin-left: 150px;" alt="">
+        <div id="msgbox" style="visibility: hidden;">
+            <p style="color: black;">Adicionar no futuro:</p>
+            <p>Adicionar parcelas de cartão de crédito recorrentes</p>
+            <p>Adicionar uma forma de filtrar a tabela da fatura do cartao por data</p>
+        </div>
+    </div>
+    <!-- IDTitulo -> Gero automaticamente<br>
+            nomeTitulo -> primeiro input<br>
+            valorTotal -> segundo input<br>
+            valorAberto -> agora é o mesmo valor acima<br>
+            dataAbertura-> agora<br>
+            dataQuitacao-> null<br>
+            qtdParcelas -> terceiro input<br>
+            recorrente -> checkbox ali<br>
+            parecelas -> esta gerando no Javascript<br>
+            situacao -> aberto<br>
+            tipo -> fiz ali<br>
+            categoria -> fazer uma consulta <br> -->
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+<script>
+
+    function createBond() {
+        var titulos = document.getElementById('titulos');
+        var cartao = document.getElementById('cartao');
+
+        var nomeTitulo = titulos.nomeTitulo.value;
+        var ValorTotal = convertePonto(titulos.valorTotal.value);
+        var dataAbertura = titulos.dataAbertura.value;
+        var categoria = titulos.categoria.value;
+        var qtdParcelas = titulos.qtdParcelas.value;
+        var recorrente = titulos.recorrente.checked;
+        var tipo = titulos.tipo.value;
+
+        var data = 'createBond=1&nomeTitulo=' + nomeTitulo + '&ValorTotal=' + ValorTotal + '&dataAbertura=' + dataAbertura + '&categoria=' + categoria + '&qtdParcelas=' + qtdParcelas + '&recorrente=' + recorrente + '&tipo=' + tipo;
+        console.log(data);
+        
+    }
+
+    function checkCategory(categoria) {
+
+        if (categoria.options[categoria.selectedIndex].value == 1) {
+            document.getElementById('right').style.display = 'block';
+            document.getElementById("qtdParcelas").selectedIndex = 1;
+        } else {
+            document.getElementById('right').style.display = 'none';
+            document.getElementById('cardBillTable').style.display = 'none';
+        }
+    }
+
+    function unParse(data) {
+        var dados = JSON.parse(data);
+        var selectTitulo = document.getElementById('categoria');
+        var selectCartao = document.getElementById('selectCartao');
+
+        for (var i = 0; i < dados.length; i++) {
+            var option = document.createElement('option');
+            option.value = dados[i].ID;
+            option.innerHTML = dados[i].descricao;
+            selectTitulo.appendChild(option);
+        }
+
+        for (var i = 1; i < dados.length; i++) {
+            var option = document.createElement('option');
+            option.value = dados[i].ID;
+            option.innerHTML = dados[i].descricao;
+            selectCartao.appendChild(option);
+        }
+    }
+
+     var fatura = [];
+
+    function cardBill() {
+        document.getElementById('cardBillTable').style.display = 'block';
+        var descricaoItem = document.getElementById('descricaoItem').value;
+        var dataCobranca = document.getElementById('dataCobranca').value;
+        var valor = convertePonto(document.getElementById('valor').value);
+        const TOTAL = convertePonto(document.getElementById("valorTotal").value);
+        document.getElementById("titleFatura").innerHTML = `(Valor Total: ${convertePonto(TOTAL, 1)})`
+
+        // Criar um novo item e adicionar ao objeto fatura
+        var novoItem = {
+            descricao: descricaoItem,
+            data: dataCobranca,
+            valor: valor
+        };
+
+        fatura.push(novoItem);
+
+        // Ordenar a fatura pelo campo "data"
+        fatura.sort(function (a, b) {
+            return new Date(a.data) - new Date(b.data);
+        });
+
+        // Atualizar a tabela cardBill com os itens ordenados
+        var faturaCartao = document.getElementById("cardBill");
+        faturaCartao.innerHTML = '<tr class="table-dark"><th style="width:100px;">Data</th><th>Nome</th><th>Valor</th></tr>';
+
+        for (var i = 0; i < fatura.length; i++) {
+            var item = fatura[i];
+            faturaCartao.innerHTML += '<tr class="table-hover"><td>' + item.data + '</td><td>' + item.descricao + '</td><td>' + convertePonto(item.valor, 1) + '</td></tr>';
+        }
+
+        var total = calcularTotal();
+        faturaCartao.innerHTML += '<tr class="table-dark"><td colspan="2" style="text-align: right;">Total:</td><td id="VlTotal">' + convertePonto(total.toFixed(2), 1) + '</td></tr>';
+        verificarTotal();
+
+
+        function calcularTotal() {
+            var total = 0;
+            for (var i = 0; i < fatura.length; i++) {
+                total += parseFloat(fatura[i].valor);
+            }
+            return total;
+        }
+
+        function verificarTotal() {
+            var total = convertePonto(document.getElementById("VlTotal").innerHTML);
+            if (total < TOTAL) {
+                // document.getElementById("VlTotal").style.backgroundColor = "yellow";
+            } else if (total == TOTAL) {
+                document.getElementById("VlTotal").style.backgroundColor = "green";
+            }
+            else if (total > TOTAL) {
+                document.getElementById("VlTotal").style.backgroundColor = "red";
+            }
+            return total;
+        }
+    }
+
+
+    function connection(data) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', 'Pagamentos.php', true);
+        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+        xhr.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                // document.getElementById('categoria').innerHTML = this.responseText;
+                unParse(xhr.responseText);
+            }
+        }
+        xhr.send(data);
+    }
+
+    getCategory();
+    function getCategory() {
+        var data = 'selectCategory=1';
+        connection(data);
+    }
+
+    function generateInstallments() {
+        const valorTotal = convertePonto(document.getElementById('valorTotal').value);
+        const qtdParcelas = document.getElementById('qtdParcelas').value;
+        const dataAbertura = new Date(document.getElementById('dataAbertura').value);
+        const recorrente = document.getElementById('recorrente').checked;
+        const table = document.getElementById("installments");
+        table.innerHTML = '<tr class="table-dark"><th>Valor</th><th>Emissão</th><th>Vencimento</th><th>Nº</th><th>Título Referente</th></tr>';
+
+        const valorParcela = valorTotal / qtdParcelas;
+        const parcelas = [];
+
+        for (let i = 0; i < qtdParcelas; i++) {
+            const parcela = {
+                valor: valorParcela.toFixed(2),
+                emissao: formatDateToYYYYMMDD(dataAbertura),
+                vencimento: formatDateToYYYYMMDD(new Date(dataAbertura.getFullYear(), dataAbertura.getMonth() + i, dataAbertura.getDate())),
+                numero: i + 1,
+                recorrente: recorrente
+            }
+            let valor = convertePonto(parcela.valor, true)
+            parcelas.push(parcela);
+            const row = table.insertRow();
+            row.insertCell().innerHTML = valor;
+            row.insertCell().innerHTML = parcela.emissao;
+            row.insertCell().innerHTML = parcela.vencimento;
+            row.insertCell().innerHTML = parcela.numero;
+            row.insertCell().innerHTML = 1;
+
+        }
+        console.log(parcelas);
+    }
+    function convertePonto(valor, oposto) {
+        if (typeof valor !== 'string') {
+            valor = valor.toString();
+        }
+
+        if (valor.indexOf('.') === -1 && valor.indexOf(',') === -1) {
+            return valor + ',00';
+        }
+
+        if (oposto) {
+            return valor.replace('.', ',');
+        }
+
+        if (valor.includes(',')) {
+            return valor.replace(',', '.');
+        }
+
+        return valor;
+    }
+
+    function formatDateToYYYYMMDD(date) {
+        const year = date.getFullYear();
+        const day = date.getDate().toString().padStart(2, '0');
+        const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Adiciona 1 ao mês, pois janeiro é 0
+
+        return `${year}-${month}-${day}`;
+    }
+
+    function formatCurrency(input) {
+        const value = input.value.replace(/[^\d,]/g, ''); // Remove caracteres não numéricos exceto a vírgula
+        const parts = value.split(',');
+
+        if (parts.length > 1) {
+            const formattedValue = parts[0] + ',' + parts[1].substr(0, 2);
+            input.value = formattedValue;
+        } else {
+            input.value = parts[0] + ',00';
+        }
+
+    }
+
+    function tempFunction(cmd) {
+        if (cmd == 1) {
+            document.getElementById('msgbox').style.visibility = 'visible';
+        } else
+            if (cmd == 2) {
+                document.getElementById('msgbox').style.visibility = 'hidden';
+            }
+    }
+
+
+
+
+</script>
+
+</html>
