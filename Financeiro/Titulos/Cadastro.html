@@ -57,6 +57,15 @@
         .dark-mode {
             background-color: #282c34;
             color: #fff;
+            transition: 1s;
+
+        }
+
+        .light-mode {
+            background-color: #fff;
+            color: #000;
+            transition: 1s;
+
         }
 
         #futureIcon {
@@ -71,7 +80,10 @@
             border-radius: 5px;
             padding: 5px;
             width: 300px;
+        }
 
+        #installmentsTable {
+            display: none;
         }
     </style>
 </head>
@@ -122,7 +134,7 @@
             </form>
             <button type="submit" onclick="generateInstallments()" class="btn btn-primary">Gerar Parcelas</button>
 
-            <div class="container mt-5"> <!-- col-5 -->
+            <div class="container mt-5" id="installmentsTable"> <!-- col-5 -->
                 <h2>Parcelas:</h2>
                 <table id="installments" class="table table-striped table-hover">
                     <tr class="table-dark">
@@ -130,7 +142,6 @@
                         <th>Emissão</th>
                         <th>Vencimento</th>
                         <th>Nº</th>
-                        <th>Título Referente</th>
                     </tr>
                 </table>
             </div>
@@ -170,9 +181,9 @@
         </div>
         <div title="Bond == título nesse contexto"><button class="btn btn-success" onclick="createBond()">Cadastrar
                 Título</button>
-                <p style="color: red; font-style: italic; text-align: center;">^^^^^^^^^^^<br>  Voltar aqui.</p>
-                
-                </div>
+            <p style="color: red; font-style: italic; text-align: center;"></p>
+
+        </div>
     </div>
 
     <div id="futureIcon" onmouseover="tempFunction(1)" onmouseleave="tempFunction(2)">
@@ -211,11 +222,18 @@
         var categoria = titulos.categoria.value;
         var qtdParcelas = titulos.qtdParcelas.value;
         var recorrente = titulos.recorrente.checked;
+        if (recorrente = 'false') {
+            recorrente = '';
+        } else {
+            recorrente = 1;
+        }
         var tipo = titulos.tipo.value;
+        var parcelasJSON = JSON.stringify(parcelas);
 
-        var data = 'createBond=1&nomeTitulo=' + nomeTitulo + '&ValorTotal=' + ValorTotal + '&dataAbertura=' + dataAbertura + '&categoria=' + categoria + '&qtdParcelas=' + qtdParcelas + '&recorrente=' + recorrente + '&tipo=' + tipo;
-        console.log(data);
-        
+        var data = 'createBond=1&nomeTitulo=' + nomeTitulo + '&ValorTotal=' + ValorTotal + '&dataAbertura=' + dataAbertura + '&categoria=' + categoria + '&qtdParcelas=' + qtdParcelas + '&recorrente=' + recorrente + '&tipo=' + tipo+ '&parcelasJSON=' + parcelasJSON;
+        // var data2 = 'parcelasJSON=' + parcelasJSON + '&nomeTitulo=' + nomeTitulo + '&categoria=' + categoria;
+        connection(data, 'createBond', '../model/titulos.php');
+        // connection(data2, 'createBond', '../model/parcelas.php');
     }
 
     function checkCategory(categoria) {
@@ -230,6 +248,7 @@
     }
 
     function unParse(data) {
+        // console.log(data);
         var dados = JSON.parse(data);
         var selectTitulo = document.getElementById('categoria');
         var selectCartao = document.getElementById('selectCartao');
@@ -249,7 +268,7 @@
         }
     }
 
-     var fatura = [];
+    var fatura = [];
 
     function cardBill() {
         document.getElementById('cardBillTable').style.display = 'block';
@@ -310,14 +329,21 @@
     }
 
 
-    function connection(data) {
+    function connection(data, output, file) {
         var xhr = new XMLHttpRequest();
-        xhr.open('POST', 'Pagamentos.php', true);
+        xhr.open('POST', file, true);
         xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
         xhr.onreadystatechange = function () {
             if (this.readyState == 4 && this.status == 200) {
-                // document.getElementById('categoria').innerHTML = this.responseText;
-                unParse(xhr.responseText);
+                if (output == 'getCategory') {
+                    // document.getElementById('categoria').innerHTML = this.responseText;
+                    unParse(xhr.responseText);
+                    // console.log(xhr.responseText)
+                } else
+                    if (output == 'createBond') {
+                        console.log(xhr.responseText);
+                        // console.log(this.responseText);
+                    }
             }
         }
         xhr.send(data);
@@ -326,19 +352,20 @@
     getCategory();
     function getCategory() {
         var data = 'selectCategory=1';
-        connection(data);
+        connection(data, 'getCategory', '../model/tipotitulo.php');
     }
 
+    const parcelas = [];
     function generateInstallments() {
         const valorTotal = convertePonto(document.getElementById('valorTotal').value);
         const qtdParcelas = document.getElementById('qtdParcelas').value;
         const dataAbertura = new Date(document.getElementById('dataAbertura').value);
-        const recorrente = document.getElementById('recorrente').checked;
         const table = document.getElementById("installments");
-        table.innerHTML = '<tr class="table-dark"><th>Valor</th><th>Emissão</th><th>Vencimento</th><th>Nº</th><th>Título Referente</th></tr>';
+        var installmentsTable = document.getElementById("installmentsTable");
+        installmentsTable.style.display = 'block';
+        table.innerHTML = '<tr class="table-dark"><th>Valor</th><th>Emissão</th><th>Vencimento</th><th>Nº</th></tr>';
 
         const valorParcela = valorTotal / qtdParcelas;
-        const parcelas = [];
 
         for (let i = 0; i < qtdParcelas; i++) {
             const parcela = {
@@ -346,7 +373,6 @@
                 emissao: formatDateToYYYYMMDD(dataAbertura),
                 vencimento: formatDateToYYYYMMDD(new Date(dataAbertura.getFullYear(), dataAbertura.getMonth() + i, dataAbertura.getDate())),
                 numero: i + 1,
-                recorrente: recorrente
             }
             let valor = convertePonto(parcela.valor, true)
             parcelas.push(parcela);
@@ -355,11 +381,10 @@
             row.insertCell().innerHTML = parcela.emissao;
             row.insertCell().innerHTML = parcela.vencimento;
             row.insertCell().innerHTML = parcela.numero;
-            row.insertCell().innerHTML = 1;
 
         }
-        console.log(parcelas);
     }
+    
     function convertePonto(valor, oposto) {
         if (typeof valor !== 'string') {
             valor = valor.toString();

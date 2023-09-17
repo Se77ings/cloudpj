@@ -6,8 +6,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
   <script src="../lib/script.js"></script>
-  <link rel="stylesheet" href="../lib/style/style.css" />
+  <!-- <link rel="stylesheet" href="../lib/style/style.css" /> -->
   <title>Financeiro Main</title>
   <style>
     #navOptions {
@@ -21,23 +23,98 @@
     #navOptions:hover {
       cursor: pointer;
     }
+
+    #main-header {
+      height: 100px;
+      transition: 0.5s;
+      overflow: hidden;
+      position: relative;
+    }
+
+    #main-header.expanded {
+      height: 100px;
+    }
+
+    #main-header.retracted {
+      margin-top: -80px;
+      height: 90px;
+      transition: 0.5s;
+    }
+
+    .dark-mode {
+      transition: 1s;
+    }
+
+    .dark-mode #navOptions {
+      background-color: #3D434F;
+      color: #fff;
+    }
+
+    .dark-mode #head {
+      background-color: #1A1C27;
+      color: #fff;
+    }
+
+    .light-mode {
+      transition: 1s;
+    }
+
+    .light-mode #head {
+      background-color: #61A1AD;
+    }
+
+    .light-mode #navOptions {
+      background-color: white;
+      color: #000;
+    }
+
+    span.bi {
+      font-size: 2rem;
+      transition: 2s;
+    }
+
+    #theme {
+      position: fixed;
+      bottom: 15px;
+      right: 20px;
+      cursor: pointer;
+    }
+
+    .headerNav {
+      cursor: pointer;
+      padding: 3px;
+      border: solid 1px black;
+      border-radius: 5px;
+      width: fit-content;
+    }
+
+    .headerNav:hover {
+      background-color: grey;
+      color: white;
+    }
   </style>
 </head>
 
-<body>
-  <header>
+<body id="body" class="light-mode">
+  <header onmouseover="exibeHeader()" onmouseout="escondeHeader()" id="main-header" class="retracted">
     <div>
       <h1 onclick="redireciona(0)">Header</h1>
-      <p onclick="redireciona(1)" class="headerNav">Financeiro</p>
+      <p onclick="redireciona(1)" class="headerNav expanded">Financeiro</p>
     </div>
   </header>
-  <header style="display: flex">
-    <p id="navOptions" onclick="opcoesFrame(1)">Cadastrar Títulos</p>
+  <header style="display: flex" id="head">
+    <p id="navOptions" onclick="opcoesFrame(1)">Cadastro Título</p>
     <p id="navOptions" onclick="opcoesFrame(2)">Carteira</p>
-    <p id="navOptions" onclick="opcoesFrame(3)">Quitar Títulos</p>
+    <p id="navOptions" onclick="opcoesFrame(3)">Consulta Títulos</p>
+    <p id="navOptions" onclick="opcoesFrame(4)">Quitação </p>
+
   </header>
 
-  <iframe id="main" style="border: solid blue 1px" width="100%" height="850px" frameborder="1"></iframe>
+  <iframe id="main" width="100%" height="850px" frameborder="1"></iframe>
+
+  <div id="theme">
+    <span id="themeSpan" class="bi bi-sun" onclick="toggleTheme()"></span>
+  </div>
   <p>Ideias soltas:</p>
   <p>
     pensando no processo de tras pra frente, preciso entao lançar uma compra,
@@ -64,9 +141,49 @@
     patrimonial
   </p>
   <script>
-    var previousSrc = null;
-    opcoesFrame(1);
+    function toggleTheme() {
+      var theme = document.getElementById("themeSpan");
+      var body = document.getElementById("body");
 
+      var iframe = document.getElementById("main");
+      iframe = iframe.contentDocument;
+      iframe = iframe.body
+
+
+
+      if (theme.classList.contains("bi-sun")) { //tema claro
+        theme.classList.remove("bi-sun");
+        theme.classList.add("bi-moon");
+        body.classList.remove("light-mode");
+        body.classList.add("dark-mode");
+        iframe.classList.remove("light-mode");
+        iframe.classList.add("dark-mode");
+
+      } else {
+        theme.classList.remove("bi-moon");
+        theme.classList.add("bi-sun");
+        body.classList.remove("dark-mode");
+        body.classList.add("light-mode");
+        iframe.classList.remove("dark-mode");
+        iframe.classList.add("light-mode");
+
+      }
+    }
+
+    var previousSrc = null;
+    opcoesFrame(3);
+
+    function exibeHeader() {
+      var header = document.getElementById("main-header");
+      header.classList.add("expanded");
+      header.classList.remove("retracted");
+    }
+
+    function escondeHeader() {
+      var header = document.getElementById("main-header");
+      header.classList.add("retracted");
+      header.classList.remove("expanded");
+    }
 
     function executeFooEveryTwoSeconds() {
       atualizaFrame(); // Chama a função foo() imediatamente
@@ -94,11 +211,13 @@
     function opcoesFrame(opt) {
       var main = document.getElementById("main");
       if (opt == 1) {
-        main.src = "Pagamentos/Pagamentos.html";
+        main.src = "Titulos/Cadastro.html";
       } else if (opt == 2) {
         main.src = "Balanco/Fundos.html";
       } else if (opt == 3) {
-        main.src = "Titulos/Titulos.html";
+        main.src = "Titulos/Consulta.html";
+      }else if (opt == 4) {
+        main.src = "Pagamentos/Quitacao.html";
       }
     }
   </script>
