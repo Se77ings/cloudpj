@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,14 +10,15 @@
 
     <title>Lista músicas</title>
 </head>
+
 <body>
     <div class="container my-5">
         <div class="row justify-content-center">
             <div class="col-md-6 col-lg-4">
                 <div class="d-flex align-items-center mb-3">
-                    <input type="text" class="form-control me-2" placeholder="Digite o nome">
-                    <input type="text" class="form-control me-2" placeholder="Digite o Another">
-                    <button class="btn btn-primary">></button>
+                    <input type="text" class="form-control me-2" id="nome" placeholder="Digite o nome">
+                    <input type="text" class="form-control me-2" id="another" placeholder="Digite o Another">
+                    <button class="btn btn-primary" onclick="registraNovo()">></button>
                 </div>
             </div>
         </div>
@@ -31,7 +33,7 @@
                                 <th>Another</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="inputs">
                             <!-- Aqui serão adicionadas as linhas da tabela dinamicamente -->
                         </tbody>
                     </table>
@@ -40,11 +42,12 @@
         </div>
     </div>
 </body>
+
 </html>
 
-    <script>
-        init();
-        async function lerLista() {
+<script>
+    init();
+    async function lerLista(exibe) {
         var numero = 0;
         const response = await fetch('lista.txt');
         const text = await response.text();
@@ -56,17 +59,31 @@
             var numero = columns[0];
             var nome = columns[1];
             var another = columns[2];
-            resultadosDiv.innerHTML += `<tr><td>${numero}</td><td>${nome}</td><td>${another}</td></tr>`
+            if (exibe == true) {
+                resultadosDiv.innerHTML += `<tr><td>${numero}</td><td>${nome}</td><td>${another}</td></tr>`
+            }
         }
 
         return numero;
-        }
+    }
 
-        async function init() {
-        var lastNumber = await lerLista();
-        console.log('Último número -> '+lastNumber);
-        }
+    async function init() {
+        var lastNumber = await lerLista(true);
+        console.log('Último número -> ' + lastNumber);
+    }
 
-    </script>
+    async function registraNovo() {
+        var nome = document.getElementById("nome").value;
+        var another = document.getElementById("another").value;
+        lastNumber = await lerLista(false);
+        console.log('Último número -> ' + lastNumber)
+        var numero = parseInt(lastNumber) + 1;
+        var linha = numero + ";" + nome + ";" + another + "\n";
+        var resultadosDiv = document.getElementById("inputs");
+        resultadosDiv.innerHTML += `<tr><td>${numero}</td><td>${nome}</td><td>${another}</td></tr>`;
+    }
+
+</script>
 </body>
+
 </html>
