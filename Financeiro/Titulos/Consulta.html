@@ -47,7 +47,7 @@
     </style>
 </head>
 
-<body class="light-mode" onload="connection('SelectInicial=1', 'result', '../model/titulos.php')">
+<body id="body" onload="verifyTheme()">
     <div class="container mt-4">
         <div class="row" id="head">
             <div class="col-12">
@@ -79,7 +79,7 @@
                     </select>
                 </div>
                 <div class="form-group">
-                <br>
+                    <br>
                     <button class="btn btn-success">Filtrar</button>
                 </div>
             </div>
@@ -113,7 +113,11 @@
     </div>
     <script>
         connection('getCategory=1', 'categoria', '../model/tipotitulo.php');
-        
+
+        function verifyTheme() {
+            connection('verify=1', 'tema', '../controller/theme.php');
+            connection('SelectInicial=1', 'result', '../model/titulos.php')
+        }
 
         function connection(data, output, file) {
             var xhr = new XMLHttpRequest();
@@ -122,66 +126,74 @@
             xhr.onreadystatechange = function () {
                 if (this.readyState == 4 && this.status == 200) {
                     if (output == 'categoria') {
-                        unParse(xhr.responseText, output);
-                    }
-                    if(output == 'result'){
-                        unParse(xhr.responseText, 'result');
-                    }
+                        // unParse(xhr.responseText, output);
+                    } else
+                        if (output == 'result') {
+                            // unParse(xhr.responseText, 'result');
+                        } else
+                            if (output == "tema") {
+                                var response = xhr.responseText;
+                                if (response == 'dark') {
+                                    body.classList.add('dark-mode');
+                                } else {
+                                    body.classList.add('light-mode');
+                                }
+                            }
                 }
             }
             xhr.send(data);
         }
 
         function unParse(data, output) {
-            if(output == 'categoria'){  
-            var dados = JSON.parse(data);
-            var selectTitulo = document.getElementById('categoria');
-            
-
-            for (var i = 0; i < dados.length; i++) {
-                var option = document.createElement('option');
-                option.value = dados[i].ID;
-                option.innerHTML = dados[i].descricao;
-                selectTitulo.appendChild(option);
-            }
-            }else 
-            if(output == 'result'){
-                // console.log(data);
+            if (output == 'categoria') {
                 var dados = JSON.parse(data);
-                console.log(dados);
-                var table = document.querySelector('tbody');
+                var selectTitulo = document.getElementById('categoria');
+
+
                 for (var i = 0; i < dados.length; i++) {
-                    var tr = document.createElement('tr');
-                    var td = document.createElement('td');
-                    td.innerHTML = dados[i].IDTitulo;
-                    tr.appendChild(td);
-                    var td = document.createElement('td');
-                    td.innerHTML = dados[i].valorTotal;
-                    tr.appendChild(td);
-                    var td = document.createElement('td');
-                    td.innerHTML = dados[i].valorAberto;
-                    tr.appendChild(td);
-                    var td = document.createElement('td');
-                    td.innerHTML = dados[i].dataAbertura;
-                    tr.appendChild(td);
-                    var td = document.createElement('td');
-                    td.innerHTML = dados[i].dataQuitacao? dados[i].dataQuitacao : '---';
-                    tr.appendChild(td);
-                    var td = document.createElement('td');
-                    td.innerHTML = dados[i].qtdParcelas;
-                    tr.appendChild(td);
-                    var td = document.createElement('td');
-                    td.innerHTML = dados[i].situacao;
-                    tr.appendChild(td);
-                    var td = document.createElement('td');
-                    td.innerHTML = dados[i].categoria;
-                    tr.appendChild(td);
-                    var td = document.createElement('td');
-                    td.innerHTML = '<button class="btn btn-primary">Editar</button>';
-                    tr.appendChild(td);
-                    table.appendChild(tr);
+                    var option = document.createElement('option');
+                    option.value = dados[i].ID;
+                    option.innerHTML = dados[i].descricao;
+                    selectTitulo.appendChild(option);
                 }
-            }
+            } else
+                if (output == 'result') {
+                    // console.log(data);
+                    var dados = JSON.parse(data);
+                    console.log(dados);
+                    var table = document.querySelector('tbody');
+                    for (var i = 0; i < dados.length; i++) {
+                        var tr = document.createElement('tr');
+                        var td = document.createElement('td');
+                        td.innerHTML = dados[i].IDTitulo;
+                        tr.appendChild(td);
+                        var td = document.createElement('td');
+                        td.innerHTML = dados[i].valorTotal;
+                        tr.appendChild(td);
+                        var td = document.createElement('td');
+                        td.innerHTML = dados[i].valorAberto;
+                        tr.appendChild(td);
+                        var td = document.createElement('td');
+                        td.innerHTML = dados[i].dataAbertura;
+                        tr.appendChild(td);
+                        var td = document.createElement('td');
+                        td.innerHTML = dados[i].dataQuitacao ? dados[i].dataQuitacao : '---';
+                        tr.appendChild(td);
+                        var td = document.createElement('td');
+                        td.innerHTML = dados[i].qtdParcelas;
+                        tr.appendChild(td);
+                        var td = document.createElement('td');
+                        td.innerHTML = dados[i].situacao;
+                        tr.appendChild(td);
+                        var td = document.createElement('td');
+                        td.innerHTML = dados[i].categoria;
+                        tr.appendChild(td);
+                        var td = document.createElement('td');
+                        td.innerHTML = '<button class="btn btn-primary">Editar</button>';
+                        tr.appendChild(td);
+                        table.appendChild(tr);
+                    }
+                }
         }
     </script>
 </body>

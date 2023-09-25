@@ -95,7 +95,7 @@
   </style>
 </head>
 
-<body id="body" class="light-mode">
+<body id="body" class="light-mode" onload="verifyTheme()">
   <header onmouseover="exibeHeader()" onmouseout="escondeHeader()" id="main-header" class="retracted">
     <div>
       <h1 onclick="redireciona(0)">Header</h1>
@@ -113,7 +113,7 @@
   <iframe id="main" width="100%" height="850px" frameborder="1"></iframe>
 
   <div id="theme">
-    <span id="themeSpan" class="bi bi-sun" onclick="toggleTheme()"></span>
+    <span id="themeSpan" class="bi bi-sun" onclick="toggleThemeReq()"></span> <!-- tirei<<<<<<<< -->
   </div>
   <p>Ideias soltas:</p>
   <p>
@@ -141,6 +141,10 @@
     patrimonial
   </p>
   <script>
+    function verifyTheme() {
+      connection("verify=1", "controller/theme.php", "tema");
+    }
+
     function toggleTheme() {
       var theme = document.getElementById("themeSpan");
       var body = document.getElementById("body");
@@ -149,25 +153,61 @@
       iframe = iframe.contentDocument;
       iframe = iframe.body
 
-
-
       if (theme.classList.contains("bi-sun")) { //tema claro
         theme.classList.remove("bi-sun");
         theme.classList.add("bi-moon");
-        body.classList.remove("light-mode");
-        body.classList.add("dark-mode");
-        iframe.classList.remove("light-mode");
-        iframe.classList.add("dark-mode");
-
       } else {
         theme.classList.remove("bi-moon");
         theme.classList.add("bi-sun");
-        body.classList.remove("dark-mode");
-        body.classList.add("light-mode");
-        iframe.classList.remove("dark-mode");
-        iframe.classList.add("light-mode");
-
+        // iframe.verifyTheme();
       }
+    }
+
+    function toggleThemeReq(){
+      var theme = document.getElementById("themeSpan");
+      iframe = document.getElementById("main");
+
+      if (theme.classList.contains("bi-sun")) { //tema claro
+        // console.log("tema claro")
+        theme.classList.remove("bi-sun");
+        theme.classList.add("bi-moon");
+        connection("tema=dark", "controller/theme.php", "verify" );
+      } else if(theme.classList.contains("bi-moon")){
+        // console.log("tema escuro");
+        theme.classList.remove("bi-moon");
+        theme.classList.add("bi-sun");
+        connection("tema=light", "controller/theme.php", "verify");
+      }
+      verifyTheme();
+      iframe.contentDocument.location.reload(true);
+
+    }
+
+    function connection(data, url, output) {
+      var xhr = new XMLHttpRequest();
+      xhr.open("POST", url, true);
+      xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+      xhr.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+          // console.log(xhr.responseText)
+          if (output == "tema") {
+            var theme = document.getElementById("themeSpan");
+            var response = xhr.responseText;
+            if (response == 'dark') {
+              body.classList.add('dark-mode');
+              body.classList.remove('light-mode');
+              theme.classList.remove("bi-sun");
+              theme.classList.add("bi-moon");
+            } else {
+              body.classList.add('light-mode');
+              body.classList.remove('dark-mode');
+              theme.classList.remove("bi-moon");
+              theme.classList.add("bi-sun");
+            }
+          }
+        }
+      }
+      xhr.send(data);
     }
 
     var previousSrc = null;
@@ -216,7 +256,7 @@
         main.src = "Balanco/Fundos.html";
       } else if (opt == 3) {
         main.src = "Titulos/Consulta.html";
-      }else if (opt == 4) {
+      } else if (opt == 4) {
         main.src = "Pagamentos/Quitacao.html";
       }
     }
