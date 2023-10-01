@@ -4,10 +4,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../lib/styles.css">
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <title>Pagamentos</title>
     <style>
+        body {
+            background-color: #282c34;
+            color: #fff;
+            /* transition: 1s; */
+        }
+
         #myForm {
             display: flex;
             flex-direction: column;
@@ -54,20 +62,6 @@
             display: none;
         }
 
-        .dark-mode {
-            background-color: #282c34;
-            color: #fff;
-            transition: 1s;
-
-        }
-
-        .light-mode {
-            background-color: #fff;
-            color: #000;
-            transition: 1s;
-
-        }
-
         #futureIcon {
             position: absolute;
             top: 0;
@@ -88,7 +82,7 @@
     </style>
 </head>
 
-<body onload="verifyTheme()" id="body">
+<body class="dark-mode" onload="verifyTheme()" id="body">
     <div class="container mt-5" id="global">
         <div class="container mt-0" id="left">
             <h2 style="text-align: center;">Título</h2>
@@ -193,6 +187,7 @@
             <p>Adicionar uma forma de filtrar a tabela da fatura do cartao por data</p>
         </div>
     </div>
+
     <!-- IDTitulo -> Gero automaticamente<br>
             nomeTitulo -> primeiro input<br>
             valorTotal -> segundo input<br>
@@ -209,7 +204,10 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+<script src="../view/dateAndNumberFormatting.js"></script>
 <script>
+
+
     function verifyTheme() {
         connection('verify=1', 'tema', '../controller/theme.php');
     }
@@ -232,9 +230,7 @@
         var parcelasJSON = JSON.stringify(parcelas);
 
         var data = 'createBond=1&nomeTitulo=' + nomeTitulo + '&ValorTotal=' + ValorTotal + '&dataAbertura=' + dataAbertura + '&categoria=' + categoria + '&qtdParcelas=' + qtdParcelas + '&recorrente=' + recorrente + '&tipo=' + tipo + '&parcelasJSON=' + parcelasJSON;
-        // var data2 = 'parcelasJSON=' + parcelasJSON + '&nomeTitulo=' + nomeTitulo + '&categoria=' + categoria;
         connection(data, 'createBond', '../model/titulos.php');
-        // connection(data2, 'createBond', '../model/parcelas.php');
     }
 
     function checkCategory(categoria) {
@@ -277,7 +273,7 @@
         var dataCobranca = document.getElementById('dataCobranca').value;
         var valor = convertePonto(document.getElementById('valor').value);
         const TOTAL = convertePonto(document.getElementById("valorTotal").value);
-        document.getElementById("titleFatura").innerHTML = `(Valor Total: ${convertePonto(TOTAL, 1)})`
+        document.getElementById("titleFatura").innerHTML = `(Valor Total: ${convertePonto(TOTAL)})`
 
         // Criar um novo item e adicionar ao objeto fatura
         var novoItem = {
@@ -299,11 +295,11 @@
 
         for (var i = 0; i < fatura.length; i++) {
             var item = fatura[i];
-            faturaCartao.innerHTML += '<tr class="table-hover"><td>' + item.data + '</td><td>' + item.descricao + '</td><td>' + convertePonto(item.valor, 1) + '</td></tr>';
+            faturaCartao.innerHTML += '<tr class="table-hover"><td>' + item.data + '</td><td>' + item.descricao + '</td><td>' + convertePonto(item.valor) + '</td></tr>';
         }
 
         var total = calcularTotal();
-        faturaCartao.innerHTML += '<tr class="table-dark"><td colspan="2" style="text-align: right;">Total:</td><td id="VlTotal">' + convertePonto(total.toFixed(2), 1) + '</td></tr>';
+        faturaCartao.innerHTML += '<tr class="table-dark"><td colspan="2" style="text-align: right;">Total:</td><td id="VlTotal">' + convertePonto(total) + '</td></tr>';
         verificarTotal();
 
 
@@ -379,11 +375,11 @@
         for (let i = 0; i < qtdParcelas; i++) {
             const parcela = {
                 valor: valorParcela.toFixed(2),
-                emissao: formatDateToYYYYMMDD(dataAbertura),
-                vencimento: formatDateToYYYYMMDD(new Date(dataAbertura.getFullYear(), dataAbertura.getMonth() + i, dataAbertura.getDate())),
+                emissao: DatetoDDMMYYY(dataAbertura),
+                vencimento: DatetoDDMMYYY(new Date(dataAbertura.getFullYear(), dataAbertura.getMonth() + i, dataAbertura.getDate())),
                 numero: i + 1,
             }
-            let valor = convertePonto(parcela.valor, true)
+            let valor = convertePonto(parcela.valor)
             parcelas.push(parcela);
             const row = table.insertRow();
             row.insertCell().innerHTML = valor;
@@ -392,34 +388,6 @@
             row.insertCell().innerHTML = parcela.numero;
 
         }
-    }
-
-    function convertePonto(valor, oposto) {
-        if (typeof valor !== 'string') {
-            valor = valor.toString();
-        }
-
-        if (valor.indexOf('.') === -1 && valor.indexOf(',') === -1) {
-            return valor + ',00';
-        }
-
-        if (oposto) {
-            return valor.replace('.', ',');
-        }
-
-        if (valor.includes(',')) {
-            return valor.replace(',', '.');
-        }
-
-        return valor;
-    }
-
-    function formatDateToYYYYMMDD(date) {
-        const year = date.getFullYear();
-        const day = date.getDate().toString().padStart(2, '0');
-        const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Adiciona 1 ao mês, pois janeiro é 0
-
-        return `${year}-${month}-${day}`;
     }
 
     function formatCurrency(input) {

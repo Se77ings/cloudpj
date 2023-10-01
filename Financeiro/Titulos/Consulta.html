@@ -4,50 +4,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../lib/styles.css">
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <title>Títulos</title>
     <style>
-        .dark-mode {
+        body {
             background-color: #282c34;
             color: #fff;
-            transition: 1s;
-        }
-
-        .dark-mode th {
-            background-color: #152138;
-            color: white;
-        }
-
-        .dark-mode #head {
-            background-color: #152138;
-            color: white;
-            border-radius: 6px;
-            padding: 15px;
-            box-shadow: #14161a 5px 20px 20px;
-        }
-
-        .light-mode {
-            background-color: #fff;
-            color: #000;
-            transition: 1s;
-        }
-
-        .light-mode th {
-            background-color: #BEEFF7;
-            color: black;
-        }
-
-        .light-mode #head {
-            background-color: #BEEFF7;
-            border-radius: 6px;
-            padding: 15px;
-            box-shadow: #677578 5px 20px 8px;
+            /* transition: 1s; */
         }
     </style>
 </head>
 
-<body id="body" onload="verifyTheme()">
+<body id="body" class="dark-mode" onload="verifyTheme()">
     <div class="container mt-4">
         <div class="row" id="head">
             <div class="col-12">
@@ -91,11 +62,12 @@
                     <thead>
                         <tr>
                             <th style="border-radius: 10px 00px 0px 0px;">ID Título</th>
+                            <th>Descrição</th>
                             <th>Valor Total</th>
                             <th>Valor Aberto</th>
                             <th>Data de Emissão</th>
                             <th>Data de Quitação</th>
-                            <th>Parcelas</th>
+                            <th>Qtd.parcelas</th>
                             <th>Situação</th>
                             <th>Categoria</th>
                             <!-- Falta recorrente.. nao sei se cabe aqui -->
@@ -103,20 +75,20 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                        </tr>
                     </tbody>
                 </table>
-                <p style="margin-left: 40px; color: orange;">Utilize os Filtros acima para visualizar os títulos:</p>
+                <p id="msgFiltros" style="margin-left: 40px; color: orange;">Utilize os Filtros acima para visualizar os
+                    títulos:</p>
             </div>
         </div>
     </div>
+    <script src="../view/dateAndNumberFormatting.js"></script>
     <script>
         connection('getCategory=1', 'categoria', '../model/tipotitulo.php');
 
         function verifyTheme() {
             connection('verify=1', 'tema', '../controller/theme.php');
-            connection('SelectInicial=1', 'result', '../model/titulos.php')
+            connection('selectInicialConsulta=1', 'result', '../model/titulos.php')
         }
 
         function connection(data, output, file) {
@@ -129,7 +101,7 @@
                         // unParse(xhr.responseText, output);
                     } else
                         if (output == 'result') {
-                            // unParse(xhr.responseText, 'result');
+                            unParse(xhr.responseText, 'result');
                         } else
                             if (output == "tema") {
                                 var response = xhr.responseText;
@@ -158,26 +130,35 @@
                 }
             } else
                 if (output == 'result') {
+                    var msg = document.getElementById("msgFiltros")
+                    msg.style.display = 'none';
                     // console.log(data);
                     var dados = JSON.parse(data);
                     console.log(dados);
                     var table = document.querySelector('tbody');
                     for (var i = 0; i < dados.length; i++) {
+                        var dataAberturaFormatada = YYYYMMDDtoDDMMYYYY(dados[i].dataAbertura, '/');
+                        var dataQuitacaoFormatada = YYYYMMDDtoDDMMYYYY(dados[i].dataQuitacao, '/');
+                        var valorTotalFormatado = convertePonto(dados[i].valorTotal);
+                        var valorAbertoFormatado = convertePonto(dados[i].valorAberto);
                         var tr = document.createElement('tr');
                         var td = document.createElement('td');
                         td.innerHTML = dados[i].IDTitulo;
                         tr.appendChild(td);
                         var td = document.createElement('td');
-                        td.innerHTML = dados[i].valorTotal;
+                        td.innerHTML = dados[i].nomeTitulo;
                         tr.appendChild(td);
                         var td = document.createElement('td');
-                        td.innerHTML = dados[i].valorAberto;
+                        td.innerHTML = valorTotalFormatado;
                         tr.appendChild(td);
                         var td = document.createElement('td');
-                        td.innerHTML = dados[i].dataAbertura;
+                        td.innerHTML = valorAbertoFormatado;
                         tr.appendChild(td);
                         var td = document.createElement('td');
-                        td.innerHTML = dados[i].dataQuitacao ? dados[i].dataQuitacao : '---';
+                        td.innerHTML = dataAberturaFormatada;
+                        tr.appendChild(td);
+                        var td = document.createElement('td');
+                        td.innerHTML = dados[i].dataQuitacao ? dataQuitacaoFormatada : '---';
                         tr.appendChild(td);
                         var td = document.createElement('td');
                         td.innerHTML = dados[i].qtdParcelas;

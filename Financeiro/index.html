@@ -92,10 +92,42 @@
       background-color: grey;
       color: white;
     }
+
+    #loading-spinner {
+
+      background: rgb(85, 84, 84);
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 20;
+      left: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .spinner {
+      user-select: none;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: auto;
+    }
+
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
+    }
   </style>
 </head>
 
-<body id="body" class="light-mode" onload="verifyTheme()">
+<body id="body" class="dark-mode" onload="verifyTheme()">
   <header onmouseover="exibeHeader()" onmouseout="escondeHeader()" id="main-header" class="retracted">
     <div>
       <h1 onclick="redireciona(0)">Header</h1>
@@ -109,12 +141,15 @@
     <p id="navOptions" onclick="opcoesFrame(4)">Quitação </p>
 
   </header>
-
+  <div id="loading-spinner">
+    <img src="../lib/icons/load-icon.png" class="spinner" alt="">
+  </div>
   <iframe id="main" width="100%" height="850px" frameborder="1"></iframe>
 
   <div id="theme">
     <span id="themeSpan" class="bi bi-sun" onclick="toggleThemeReq()"></span> <!-- tirei<<<<<<<< -->
   </div>
+
   <p>Ideias soltas:</p>
   <p>
     pensando no processo de tras pra frente, preciso entao lançar uma compra,
@@ -163,7 +198,7 @@
       }
     }
 
-    function toggleThemeReq(){
+    function toggleThemeReq() {
       var theme = document.getElementById("themeSpan");
       iframe = document.getElementById("main");
 
@@ -171,8 +206,8 @@
         // console.log("tema claro")
         theme.classList.remove("bi-sun");
         theme.classList.add("bi-moon");
-        connection("tema=dark", "controller/theme.php", "verify" );
-      } else if(theme.classList.contains("bi-moon")){
+        connection("tema=dark", "controller/theme.php", "verify");
+      } else if (theme.classList.contains("bi-moon")) {
         // console.log("tema escuro");
         theme.classList.remove("bi-moon");
         theme.classList.add("bi-sun");
@@ -211,7 +246,7 @@
     }
 
     var previousSrc = null;
-    opcoesFrame(3);
+    opcoesFrame(4);
 
     function exibeHeader() {
       var header = document.getElementById("main-header");
@@ -249,16 +284,26 @@
       // console.log("atualizou");
     }
     function opcoesFrame(opt) {
-      var main = document.getElementById("main");
-      if (opt == 1) {
-        main.src = "Titulos/Cadastro.html";
-      } else if (opt == 2) {
-        main.src = "Balanco/Fundos.html";
-      } else if (opt == 3) {
-        main.src = "Titulos/Consulta.html";
-      } else if (opt == 4) {
-        main.src = "Pagamentos/Quitacao.html";
-      }
+
+
+      document.getElementById('loading-spinner').style.display = 'flex';
+
+      setTimeout(function () {
+        document.getElementById('loading-spinner').style.display = 'none';
+
+        var main = document.getElementById("main");
+        if (opt == 1) {
+          main.src = "Titulos/Cadastro.html";
+        } else if (opt == 2) {
+          main.src = "Balanco/Fundos.html";
+        } else if (opt == 3) {
+          main.src = "Titulos/Consulta.html";
+        } else if (opt == 4) {
+          main.src = "Pagamentos/Quitacao.html";
+        }
+      }, 300); // Tempo simulado de verificação (2 segundos neste exemplo)
+
+
     }
   </script>
 </body>

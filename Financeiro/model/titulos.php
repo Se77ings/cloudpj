@@ -73,8 +73,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         }
                 }
         }else
-        if(isset($_POST['SelectInicial'])){
-                $sql = "SELECT * FROM titulos WHERE situacao = 1";
+        if(isset($_POST['selectInicialConsulta'])){
+                $sql = "SELECT IDTitulo, nomeTitulo, valorTotal, valorAberto, dataAbertura, dataQuitacao, qtdParcelas, s.descricao as 'situacao', tipo, c.descricao as 'categoria' FROM titulos
+                        LEFT JOIN categoria c on c.ID = titulos.categoria
+                        LEFT JOIN situacao s on s.IDSituacao = titulos.situacao
+                        WHERE titulos.situacao = 1";
                 $result = mysqli_query($conn, $sql);
                 $titulos = array();
                 while ($row = mysqli_fetch_assoc($result)) {

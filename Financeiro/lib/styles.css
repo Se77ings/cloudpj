@@ -1,0 +1,37 @@
+/* Global Styles */    
+        .dark-mode {
+            background-color: #282c34;
+            color: #fff;
+            /* transition: 1s; */
+        }
+
+        .dark-mode th {
+            background-color: #152138;
+            color: white;
+        }
+
+        .dark-mode #head {
+            background-color: #152138;
+            color: white;
+            border-radius: 6px;
+            padding: 15px;
+            box-shadow: #14161a 5px 20px 20px;
+        }
+
+        .light-mode {
+            background-color: #fff;
+            color: #000;
+            /* transition: 1s; */
+        }
+
+        .light-mode th {
+            background-color: #BEEFF7;
+            color: black;
+        }
+
+        .light-mode #head {
+            background-color: #BEEFF7;
+            border-radius: 6px;
+            padding: 15px;
+            box-shadow: #677578 5px 20px 8px;
+        }
