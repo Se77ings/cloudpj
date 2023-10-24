@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" role="main">
 
 <head>
   <meta charset="UTF-8">
@@ -20,8 +20,13 @@
     body {
       font-family: 'Hanken', sans-serif;
       font-weight: bold;
-      margin-top: 50px;
+      display: flex;
+      align-items: center;
+      min-height: 100vh;
+      flex-direction: column;
+      margin: 0px;
     }
+
 
     .attribution {
       font-size: 11px;
@@ -67,36 +72,36 @@
 
     }
 
-    #reaction #lbl {
+    #reaction #lblReaction {
       /* color: red; */
       color: #ff4c4c;
     }
 
-    #memory #lbl {
+    #memory #lblMemory {
       /* color: yellow; */
       color: #ffbf00;
     }
 
-    #verbal #lbl {
+    #verbal #lblVerbal {
       color: #00b3009d;
     }
 
-    #visual #lbl {
+    #visual #lblVisual {
       color: #001b94dc;
     }
 
-    #lbl img {
+    .lbl img {
       margin-right: 5px;
     }
 
-    #lbl {
+    .lbl {
       display: flex;
       flex-direction: row;
       justify-content: center;
       align-items: center;
     }
 
-    #lbl p {
+    .lbl p {
       margin-top: 5px;
       margin-bottom: 5px;
       width: 100px;
@@ -153,7 +158,7 @@
     }
 
     .row p {
-      margin: auto;
+      margin: 5px auto;
       margin-left: 14px;
     }
 
@@ -214,8 +219,8 @@
       color: grey
     }
 
-    .attribution{
-      margin-top: 30px;
+    .attribution {
+      /* margin-bottom: 70px; */
     }
 
     @media screen and (max-width:500px) {
@@ -227,7 +232,7 @@
         overflow-x: hidden;
       }
 
-      #lbl p {
+      .lbl p {
         margin-top: 5px;
         margin-bottom: 5px;
         width: 80px;
@@ -281,7 +286,8 @@
       button {
         margin-left: 0px;
       }
-      .attribution{
+
+      .attribution {
         margin-top: 15px;
       }
     }
@@ -289,13 +295,8 @@
 </head>
 
 <body>
-
-
-
-
-
   <div id="central">
-    <div id="esq">
+    <div id="esq" role="region" aria-label="Result Section">
 
       <p id="topMSG">Your Result</p>
       <div id="circle-Div">
@@ -307,28 +308,28 @@
       <p id="bottomMSG">You scored higher than 65% of the people who have taken these tests.
       </p>
     </div>
-    <div id="dir">
-      <h3>Summary</h3>
-      <div class="row" id="reaction">
-        <div id="lbl"><img src="assets/images/icon-reaction.svg" alt="Reaction Icon">
+    <div id="dir" role="region" aria-label="Summary Section">
+      <h3 role="heading">Summary</h3>
+      <div class="row" id="reaction" role="region" aria-label="Visual Section">
+        <div id="lblReaction" class="lbl"><img src="assets/images/icon-reaction.svg" alt="Reaction Icon">
           <p>Reaction</p>
         </div>
         <p class="rate">80 <span class="max-rate">/ 100</span></p>
       </div>
-      <div class="row" id="memory">
-        <div id="lbl"><img src="assets/images/icon-memory.svg" alt="Memory Icon">
+      <div class="row" id="memory" role="region" aria-label="Memory Section">
+        <div id="lblMemory" class="lbl"><img src="assets/images/icon-memory.svg" alt="Memory Icon">
           <p>Memory</p>
         </div>
         <p class="rate">92 <span class="max-rate">/ 100</span></p>
       </div>
-      <div class="row" id="verbal">
-        <div id="lbl"><img src="assets/images/icon-verbal.svg" alt="Verbal Icon">
+      <div class="row" id="verbal" role="region" aria-label="Verbal Section">
+        <div id="lblVerbal" class="lbl"><img src="assets/images/icon-verbal.svg" alt="Verbal Icon">
           <p>Verbal</p>
         </div>
         <p class="rate">61 <span class="max-rate">/ 100</span></p>
       </div>
-      <div class="row" id="visual">
-        <div id="lbl"><img src="assets/images/icon-visual.svg" alt="Visual Icon">
+      <div class="row" id="visual" role="region" aria-label="Visual Section">
+        <div id="lblVisual" class="lbl"><img src="assets/images/icon-visual.svg" alt="Visual Icon">
           <p>Visual</p>
         </div>
         <p class="rate">72 <span class="max-rate">/ 100</span></p>
@@ -336,35 +337,12 @@
       <div class="row">
         <button> Continue</button>
       </div>
-
-      <!--
-        <table border="0" align="center" cellspacing="0px" cellpadding="5px">
-        <tr class="row">
-          <td id="reaction"><img src="assets/images/icon-reaction.svg" alt="Reaction Icon"> Reaction</td>
-          <td>80 / 100</td>
-        </tr>
-        <tr class="row">
-          <td id="memory"><img src="assets/images/icon-memory.svg" alt="Memory Icon"> Memory</td>
-          <td>92 / 100</td>
-        </tr>
-        <tr class="row">
-          <td id="verbal"><img src="assets/images/icon-verbal.svg" alt="Verbal Icon"> Verbal</td>
-          <td>61 / 100</td>
-        </tr>
-        <tr class="row">
-          <td id="visual"><img src="assets/images/icon-visual.svg" alt="Visual Icon"> Visual</td>
-          <td>72 / 100</td>
-        </tr>
-      </table>
-  -->
-
     </div>
   </div>
-  <div class="attribution">
+  <div class="attribution" role="contentinfo" aria-label="Footer Information">
     Challenge by <a href="https://www.frontendmentor.io?ref=challenge" target="_blank">Frontend Mentor</a>.
     Coded by <a href="https://github.com/Se77ings">Se77ings</a>.
   </div>
-
 </body>
 
 </html>
