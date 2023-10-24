@@ -58,7 +58,7 @@
                 </div>
                 <div class="form-group mx-3">
                     <br>
-                    <button style="width: 200px" class="btn btn-primary">Quitar Selecionados</button>
+                    <button style="width: 200px" onclick="payoff()" class="btn btn-primary">Quitar Selecionados</button>
                 </div>
             </div>
         </div>
@@ -158,6 +158,23 @@
                 table.appendChild(tr);
                 // console.log(tr);
 
+            }
+        }
+
+        function payoff() {
+            var table = document.querySelector('table');
+            var rows = table.querySelectorAll('tbody tr');
+            var ids = [];
+
+            // Percorre as linhas da tabela e verifica quais estão selecionadas
+            for (var i = 0; i < rows.length; i++) {
+                var checkbox = rows[i].querySelector('input[type="checkbox"]');
+                if (checkbox.checked) {
+                    // Adiciona o ID da parcela ao array de IDs
+                    var id = rows[i].querySelector('.id').textContent;
+                    ids.push(id);
+                    console.log(ids);
+                }
             }
         }
     </script>
