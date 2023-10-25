@@ -1,64 +1,140 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1">
     <link rel="icon" href="lib/icons/siteicon.png">
-    <title>Login</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Overpass:ital,wght@0,100;0,400;0,500;1,300;1,700&display=swap"
+        rel="stylesheet">
+    <title>Main Page</title>
+    <link rel="stylesheet" href="lib/style/style.css">
     <style>
-        body{
-            background-color:black;
-            color: green;
+        header {
+            padding: 0px;
+            margin-top: 0px;
+            width: 100%;
+            min-height: 60px;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
         }
-        #sqr{
-            background-color: rgba(15, 15, 15, 0.624);
-            width: 170px;
-            margin: auto;
-            margin-top: 150px;
-            /* border: solid 2px red; */
+
+        header h1 {
+            margin-top: 0px;
+            margin-left: 15px
         }
-        input{
-            width: 150px;
-            border-radius: 7px;
+
+        .headerNav {
+            margin-left: 15px;
+            cursor: pointer;
+            padding: 3px;
+            border: solid 1px black;
+            border-radius: 5px;
+            width: fit-content;
         }
-        #btn{
-            width: 160px;
-            border-radius: 7px;
+        .headerNav:hover{
+            background-color: #0d6efd;
+            color: white;
         }
-        #alrtmsg{
-            color:red;
-            text-justify: bold;
+
+        body {
+            font-family: 'Overpass';
+            background: linear-gradient(180deg, hsla(0, 0%, 91%, 0.425) 0%, hsla(152, 28%, 50%, 0.24) 100%);
+            /* height: 500px; */
+            width: 100%;
+            margin: 0px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0px;
+
         }
+
+        .separation {
+            box-shadow: 10px 20px 30px -10px grey;
+            width: 500px;
+            border-radius: 15px;
+            margin-right: 60px;
+            margin-top: 0px;
+            background: linear-gradient(180deg, hsl(0, 0%, 91%) 0%, hsla(0, 0%, 100%, 0.397) 100%);
+        }
+
+        li {
+            list-style: circle;
+            margin: 10px;
+        }
+
+        a {
+            text-decoration: none;
+            color: black;
+        }
+
+        a:hover {
+            color: #0d6efd;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+        main {
+            display: flex;
+            justify-content: space-around;
+            /* align-items: center; */
+            flex-direction: row;
+        }
+
+        h2 {
+            margin-top: 20px;
+        }
+            @media screen and (max-width:500px) {
+            main {
+                flex-direction: column;
+            }
+            .separation{
+                margin-bottom: 50px;
+                width: 400px;
+                margin-left: 50px;
+            }
+            }
     </style>
 </head>
-<body>
-    <div id="sqr">
-        <form action="">
-            <br><label for="">Login</label><br>
-            <input type="text" id="logid" required><br><br>
-            <label for="">Senha</label><br>
-            <input type="password" id="passwd" ><br><br>
-            <input type="button" width="170px" value="Enter" id="btn" onclick="verify()">
-        </form>
-        <p id="alrtmsg"></p>
-    </div>
-    <script>
-        var log = document.getElementById("logid");
-        var pas = document.getElementById("passwd");
 
-    function verify(){
-        if(log.value == ''){
-            alrtmsg.innerHTML='Preencha um nome de usuário';
-        }else
-        if(log.value == "root"){
-            if(pas.value == 'toor'){
-                window.location.href="home.html"
-                console.log("Usuario e senha OK")
-            }else
-            alrtmsg.innerHTML= 'Nome de Usuário ou Senha incorreta'
-        }else{            
-            alrtmsg.innerHTML= 'Nome de Usuário ou Senha incorreta'
-        }
-    }
+<body>
+    <header>
+        <!-- <i class="fa-solid fa-house fa-2xl"></i> -->
+        <div>
+            <h1 onclick="redireciona(0)">Main</h1>
+            <p onclick="redireciona(1)" class="headerNav">Financeiro</p>
+        </div>
+    </header>
+    <main>
+        <div class="separation">
+            <ul>
+                <h2>FrontEnd Mentor Challenges:</h2>
+                <a href="FrontEnd Mentor/results-summary-component-main/index.html">
+                    <li>Results Summary Component</li>
+                </a>
+                <a href="FrontEnd Mentor/interactive-rating/index.html">
+                    <li>Interactive Rating Component</li>
+                </a>
+            </ul>
+        </div>
+        <div class="separation">
+            <ul>
+                <h2>Another Projects</h2>
+                <a href="Lista/lista.html">
+                    <li>Lista</li>
+                </a>
+            </ul>
+        </div>
+
+    </main>
+    <script src="lib/script.js">
+
     </script>
 </body>
+
+</html>
