@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- displays site properly based on user's device -->
-
+  <title>Frontend Mentor | Interactive rating component</title>
   <link rel="icon" type="image/png" sizes="32x32" href="./images/favicon-32x32.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Overpass:ital,wght@0,100;0,400;0,500;1,300;1,700&display=swap" rel="stylesheet">    rel="stylesheet">
-  <title>Frontend Mentor | Interactive rating component</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Overpass:ital,wght@0,100;0,400;0,500;1,300;1,700&display=swap"
+    rel="stylesheet"> rel="stylesheet">
   <style>
     body {
       background-color: hsl(216, 12%, 8%);
@@ -26,12 +26,14 @@
 
     main {
       margin: auto;
+      scale: 1.15;
     }
 
     .attribution {
       font-size: 11px;
       text-align: center;
-      color: hsl(217, 12%, 63%)
+      color: hsl(217, 12%, 63%);
+
     }
 
     .attribution a {
@@ -57,9 +59,11 @@
       border-radius: 20px
     }
 
-    h2 {
+    h1 {
       font-family: 'Overpass', sans-serif;
       color: white;
+      font-weight: 700;
+      font-size: 1.5rem;
     }
 
     p {
@@ -74,6 +78,7 @@
       list-style: none;
       padding: 0;
       margin: 0;
+      margin-top: 20px;
       color: white;
 
     }
@@ -153,8 +158,8 @@
 
     #iconStar {
       border-radius: 50%;
-      width: 30px;
-      height: 30px;
+      width: 40px;
+      height: 40px;
       background-color: hsla(216, 12%, 54%, 0.26);
       display: flex;
       justify-content: center;
@@ -178,20 +183,26 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
+        scale: 1;
       }
-      #confirmation, #central{
-        padding:15px
+
+      #confirmation,
+      #central {
+        padding: 15px
       }
-      p{
+
+      p {
         font-size: 15px;
       }
-      #central p{
+
+      #central p {
         width: 300px;
       }
 
     }
   </style>
 </head>
+
 <body>
   <main>
     <div id="central">
@@ -202,7 +213,7 @@
             fill="#FC7614" />
         </svg>
       </div>
-      <h2>How did we do?</h2>
+      <h1>How did we do?</h1>
 
       <p>Please let us know how we did with your support request. All feedback is appreciated
         to help us improve our offering!</p>
@@ -300,4 +311,5 @@
   </script>
 </body>
 <!-- Saw Feedback https://www.frontendmentor.io/solutions/responsive-design-with-html-css-felxbox-and-grid-H0-tcydTIM -->
+
 </html>
